@@ -7,7 +7,10 @@ int main()
     int choix;
     Vehicule Automobiles[50];
     int n;
-
+    Colis col;
+    char imm[];
+    char adresse[];
+    float pourc;
 
     do
     {
@@ -23,27 +26,35 @@ int main()
         }
         while((choix<0)||(choix>4));
 
-              printf("Donner n \n");
-            scanf("%d",&n);
-
+        printf("Donner n \n");
+        scanf("%d",&n);
+        RemplirParc(Automobiles,n);
 
         switch(choix)
         {
-        case 1 : AfficherParc(Automobiles,n)
-
+        case 1 :
+            AfficherParc(Automobiles,n)
             break;
 
         case 2 :
-
+            col=SaisirColis();
+            printf(" Donner immatriculation \n");
+            fflush(stdin);
+            gets(imm);
+            AjouterColis(Automobiles,n,col,imm);
 
             break;
 
         case 3 :
-
+            printf(" Donner adresse \n");
+            fflush(stdin);
+            gets(adresse);
+            AnnulerLivraisonsColis(Automobiles,n,adresse);
             break;
 
         case 4 :
-
+            pourc=CalculerPourcentLivraison(Vehicule Automobiles[],int n,char NomCh[]);
+            printf(" Pourcentage = %f \n",pourc);
             break;
 
         }
