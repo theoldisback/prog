@@ -1,154 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h>
 #include"fonction.h"
 
-
-
-void SaisirVehicule(Vehicule *V)
+int main()
 {
-    printf(" Donner immatriculation \n");
-    fflush(stdin);
-    gets((*V).imm);
-    printf(" Donner nom \n");
-    fflush(stdin);
-    gets((*V).nom);
-    (*V).nbr=0;
-}
+    int choix;
+    Vehicule Automobiles[50];
+    int n;
+    Colis col;
+    char imm[];
+    char adresse[];
+    float pourc;
 
-
-int ChercherVehicule(Vehicule Automobiles[],int n, char imm[])
-{
-    int i=0 ;
-    int  pos=-1;
-    while((i<n)&&(strcmp(imm,Automobiles[i].imm)!=0))
-    {
-        i++;
-    }
-    if(strcmp(imm,Automobiles[i].imm)==0)
-    {
-        pos=i;
-    }
-    return pos;
-}
-
-
-
-void RemplirParc (Vehicule Automobiles[],int n)
-{
-    int pos,i;
-    Vehicule V;
-    for(i=0; i<n; i++)
+    do
     {
         do
         {
-            SaisirVehicule(&V);
-            pos=ChercherVehicule(Automobiles,n,V.imm);
+            printf("\n  Choisir a partir de ce menu : \n");
+            printf("\n 1: Afficher les vehicules du parc automobile  ");
+            printf("\n 2: Ajouter un colis a un vehicule ");
+            printf("\n 3: Annuler la livraison des colis d'une destination invalide ");
+            printf("\n 4: Afficher le pourcentage de transport d'un chauffeur donne ");
+            printf("0. Quitter . \n");
+            scanf("%d",&choix);
         }
-        while(pos!=-1);
-        Automobiles[i]=V;
-    }
-}
+        while((choix<0)||(choix>4));
 
+        printf("Donner n \n");
+        scanf("%d",&n);
+        RemplirParc(Automobiles,n);
 
-
-
-void AfficherParc(Vehicule Automobiles[],int n)
-{
-
-    int i,j;
-    if(n==0)
-    {
-        printf("Aucune vehicule \n");
-    }
-    else
-    {
-        for(i=0; i<n; i++)
+        switch(choix)
         {
-            printf("Immatriculation : %s",Automobiles[i].imm);
-            printf("Nom : %s",Automobiles[i].nom);
-            printf("Nombre de colis  : %d",Automobiles[i].nbr);
-            for(j=0; j<Automobiles[i].nbr; j++)
-            {
-                printf("Numero : %d",Automobiles[i].col[j].num);
-                printf("Adresse : %s",Automobiles[i].col[j].adresse);
-            }
+        case 1 :
+            AfficherParc(Automobiles,n)
+            break;
+
+        case 2 :
+            col=SaisirColis();
+            printf(" Donner immatriculation \n");
+            fflush(stdin);
+            gets(imm);
+            AjouterColis(Automobiles,n,col,imm);
+
+            break;
+
+        case 3 :
+            printf(" Donner adresse \n");
+            fflush(stdin);
+            gets(adresse);
+            AnnulerLivraisonsColis(Automobiles,n,adresse);
+            break;
+
+        case 4 :
+            pourc=CalculerPourcentLivraison(Vehicule Automobiles[],int n,char NomCh[]);
+            printf(" Pourcentage = %f \n",pourc);
+            break;
+
         }
     }
-}
+    while(choix!=0);
 
-
-
-
-
-Colis SaisirColis()
-{
-    Colis col;
-    printf(" Donner numero \n");
-    scanf("%d",&col.num)
-    printf(" Donner adresse \n");
-    fflush(stdin);
-    gets(col.adresse);
-    return col;
-}
-
-
-void AjouterColis(Vehicule Automobiles[],int n,Colis col,char imm[])
-{
-    int pos;
-    pos=ChercherVehicule(Automobiles,n,imm);
-    if(pos!=-1)
+    if(choix==0)
     {
-        Automobiles[pos].nbr += 1;
-        SaisirColis(col);
-        Automobiles[pos].col[ Automobiles[pos].nbr] = col;
-    }
-    else
-    {
-        printf("\n Vehicule introuvable ! \n");
+        printf("Vous avez quitter !! \n");
     }
 
-}
-
-void ChercherColis(Colis T_Colis[],int  nbColis,char dest[],int * pPos)
-{
-    int i=0 ;
-    *pPos=-1;
-    while((i<nbColis)&&(strcmp(T_Colis[i].adresse,dest)!=0))
-    {
-        i++;
-    }
-    if(strcmp(T_Colis[i].adresse,dest)==0)
-    {
-        *pPos=i;
-    }
-}
-
-
-
-void Supprimer1Colis(Colis T_Colis[],int *pNbColis,int Pos)
-{
-    int i;
-    if(Pos!=-1)
-    {
-        for(i=Pos; i<(*pNbColis)-1; i++)
-        {
-            T_Colis[i]=T_Colis[i+1];
-        }
-        (*pNbColis)--;
-    }
-}
-
-
-
-
-void AnnulerLivraisonsColis(Vehicule Automobiles[],int n, char dest[])
-{
-    int i,pPos;
-
-    for(i=0;i<n;i++)
-    {
-        ChercherColis(Automobiles[i].col,Automobiles[i].nbr,dest,&pPos);
-        Supprimer1Colis(Automobiles[i].col,Automobiles[i].nbr,pPos);
-    }
+    return 0;
 }
